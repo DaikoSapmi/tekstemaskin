@@ -21,6 +21,10 @@ OFFLINE_BATCH_SIZE=8           # prosesser flere chunks i parallell
 # OFFLINE_RETURN_TIMESTAMPS: tomt, "true" for setning, "word" for ord-nivå
 OFFLINE_RETURN_TIMESTAMPS=
 OFFLINE_DEVICE=mps
+
+# Setup status
+SETUP_COMPLETED=false   # true når setup guiden er fullført
+
 # --- LLM Oppsummering (Ollama, OpenAI, Azure) ---
 
 # For lokal oppsummering med Ollama

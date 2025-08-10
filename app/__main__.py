@@ -6,6 +6,7 @@ import requests
 import shutil
 import subprocess
 import sys
+import platform
 from threading import Thread
 
 PORT = int(os.getenv("PORT", "8000"))
@@ -25,6 +26,244 @@ def check_and_setup_env():
                 print(f"⚠️  Could not create .env file: {e}")
         else:
             print("⚠️  dot_env.example not found, .env file will not be created")
+
+def is_setup_completed():
+    """Check if setup has been completed by reading .env file"""
+    if not os.path.exists(".env"):
+        return False
+    
+    try:
+        with open(".env", "r") as f:
+            content = f.read()
+            return "SETUP_COMPLETED=true" in content
+    except:
+        return False
+
+def mark_setup_completed():
+    """Mark setup as completed in .env file"""
+    if not os.path.exists(".env"):
+        return
+    
+    try:
+        with open(".env", "r") as f:
+            content = f.read()
+        
+        # Replace SETUP_COMPLETED=false with SETUP_COMPLETED=true
+        if "SETUP_COMPLETED=false" in content:
+            content = content.replace("SETUP_COMPLETED=false", "SETUP_COMPLETED=true")
+        elif "SETUP_COMPLETED=" in content:
+            # If the line exists but with a different value, update it
+            lines = content.split('\n')
+            for i, line in enumerate(lines):
+                if line.startswith("SETUP_COMPLETED="):
+                    lines[i] = "SETUP_COMPLETED=true"
+                    break
+            content = '\n'.join(lines)
+        else:
+            # If the line doesn't exist, add it
+            content += "\nSETUP_COMPLETED=true"
+        
+        with open(".env", "w") as f:
+            f.write(content)
+        
+        print("✅ Setup marked as completed")
+    except Exception as e:
+        print(f"⚠️  Could not update .env file: {e}")
+
+def reset_setup_status():
+    """Reset setup status to allow running setup guide again"""
+    if not os.path.exists(".env"):
+        return
+    
+    try:
+        with open(".env", "r") as f:
+            content = f.read()
+        
+        # Replace SETUP_COMPLETED=true with SETUP_COMPLETED=false
+        if "SETUP_COMPLETED=true" in content:
+            content = content.replace("SETUP_COMPLETED=true", "SETUP_COMPLETED=false")
+            with open(".env", "w") as f:
+                f.write(content)
+            print("✅ Setup status reset - you can run setup guide again")
+        else:
+            print("ℹ️  Setup status is already false")
+    except Exception as e:
+        print(f"⚠️  Could not reset .env file: {e}")
+
+def is_blackhole_installed():
+    """Check if BlackHole is already installed on macOS"""
+    if platform.system() != "Darwin":
+        return False
+    
+    try:
+        result = subprocess.run(["brew", "list", "blackhole-2ch"], 
+                              capture_output=True, text=True)
+        return result.returncode == 0
+    except:
+        return False
+
+def interactive_audio_setup():
+    """Interactive audio setup guide for users"""
+    print("\n" + "="*60)
+    print("🎵 AUDIO SETUP GUIDE")
+    print("="*60)
+    print("Tekstemaskin needs proper audio configuration for best results.")
+    print("This guide will help you set up audio capture for meetings.")
+    
+    system = platform.system()
+    
+    if system == "Darwin":  # macOS
+        return audio_setup_macos()
+    elif system == "Windows":
+        return audio_setup_windows()
+    elif system == "Linux":
+        return audio_setup_linux()
+    else:
+        print(f"❌ Unsupported operating system: {system}")
+        return False
+
+def audio_setup_macos():
+    """macOS audio setup guide"""
+    print("\n🍎 macOS Audio Setup")
+    print("For digital meetings, you'll want to capture both:")
+    print("  • Your microphone (for your voice)")
+    print("  • System audio (for other participants)")
+    
+    print("\n📋 Step-by-step setup:")
+    print("1. Install BlackHole 2ch (if not already installed)")
+    print("2. Open Audio MIDI Setup (Applications > Utilities)")
+    print("3. Create a Multi-Output Device")
+    print("4. Add your speakers/headphones + BlackHole 2ch")
+    print("5. Set Multi-Output Device as system audio output")
+    print("6. In Tekstemaskin, select 'BlackHole 2ch' as input")
+    
+    # Check if BlackHole is already installed
+    if is_blackhole_installed():
+        print("\n✅ BlackHole 2ch is already installed!")
+        print("   You can skip the installation step.")
+        return True
+    
+    # Check if BlackHole is installed
+    print("\n🔍 Checking BlackHole installation...")
+    try:
+        result = subprocess.run(["brew", "list", "blackhole-2ch"], 
+                              capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ BlackHole 2ch is installed via Homebrew")
+            return True
+        else:
+            print("❌ BlackHole 2ch not found")
+            print("   Install with: brew install blackhole-2ch")
+    except:
+        print("⚠️  Could not check BlackHole status")
+    
+    # Offer to install BlackHole
+    print("\n🤔 Would you like to install BlackHole 2ch now? (y/n): ", end="")
+    try:
+        response = input().lower().strip()
+        if response in ['y', 'yes', 'j', 'ja']:
+            return install_blackhole_macos()
+        else:
+            print("⏭️  Skipping BlackHole installation.")
+            print("   You can install it later with: brew install blackhole-2ch")
+            return False
+    except KeyboardInterrupt:
+        print("\n⏭️  Installation cancelled.")
+        return False
+
+def install_blackhole_macos():
+    """Install BlackHole on macOS"""
+    print("\n🚀 Installing BlackHole 2ch...")
+    
+    try:
+        # Check if Homebrew is installed
+        result = subprocess.run(["brew", "--version"], capture_output=True, text=True)
+        if result.returncode != 0:
+            print("❌ Homebrew is not installed. Please install Homebrew first:")
+            print("   https://brew.sh")
+            return False
+        
+        # Install BlackHole
+        print("📦 Installing BlackHole 2ch via Homebrew...")
+        result = subprocess.run(["brew", "install", "blackhole-2ch"], 
+                              capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            print("✅ BlackHole 2ch installed successfully!")
+            print("\n📋 Next steps:")
+            print("1. Open Audio MIDI Setup (Applications > Utilities)")
+            print("2. Create a Multi-Output Device")
+            print("3. Add your speakers + BlackHole 2ch")
+            print("4. Set as system audio output")
+            print("5. Restart your meeting applications")
+            return True
+        else:
+            print(f"❌ BlackHole installation failed: {result.stderr}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Installation error: {e}")
+        return False
+
+def audio_setup_windows():
+    """Windows audio setup guide"""
+    print("\n🪟 Windows Audio Setup")
+    print("For digital meetings, you'll want to capture both:")
+    print("  • Your microphone (for your voice)")
+    print("  • System audio (for other participants)")
+    
+    print("\n📋 Step-by-step setup:")
+    print("1. Enable Stereo Mix (if available)")
+    print("   - Right-click speaker icon → Sound settings")
+    print("   - Sound Control Panel → Recording tab")
+    print("   - Right-click empty space → Show Disabled Devices")
+    print("   - Right-click Stereo Mix → Enable")
+    print("2. Or install VB-Audio Virtual Cable")
+    print("3. In Tekstemaskin, select appropriate input device")
+    
+    # Check for Stereo Mix
+    print("\n🔍 Checking audio devices...")
+    try:
+        result = subprocess.run(["powershell", "-Command", 
+                               "Get-WmiObject -Class Win32_SoundDevice | Select-Object Name, Status"],
+                              capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Audio devices found")
+            print("💡 Check Sound Control Panel for Stereo Mix")
+        else:
+            print("⚠️  Could not check audio devices")
+    except:
+        print("⚠️  Could not check audio devices")
+    
+    return True
+
+def audio_setup_linux():
+    """Linux audio setup guide"""
+    print("\n🐧 Linux Audio Setup")
+    print("For digital meetings, you'll want to capture both:")
+    print("  • Your microphone (for your voice)")
+    print("  • System audio (for other participants)")
+    
+    print("\n📋 Step-by-step setup:")
+    print("1. Install PulseAudio (usually pre-installed)")
+    print("2. Use pavucontrol to configure audio routing")
+    print("3. Consider installing PulseAudio Volume Control")
+    print("4. In Tekstemaskin, select appropriate input device")
+    
+    # Check PulseAudio
+    print("\n🔍 Checking PulseAudio...")
+    try:
+        result = subprocess.run(["pulseaudio", "--version"], 
+                              capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"✅ PulseAudio found: {result.stdout.strip()}")
+        else:
+            print("❌ PulseAudio not found")
+            print("   Install with: sudo apt install pulseaudio")
+    except:
+        print("⚠️  Could not check PulseAudio")
+    
+    return True
 
 def check_ollama_installation():
     """Check if Ollama is installed and offer to install it"""
@@ -267,25 +506,65 @@ def open_browser():
         print("🎉 Tekstemaskin is ready to use!")
 
 if __name__ == "__main__":
+    # Check for command line arguments
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--reset-setup":
+            print("🔄 Resetting setup status...")
+            reset_setup_status()
+            sys.exit(0)
+        elif sys.argv[1] == "--help":
+            print("🚀 Tekstemaskin - Audio Transcription Tool")
+            print("\nUsage:")
+            print("  python -m app.__main__          # Start normally")
+            print("  python -m app.__main__ --reset-setup  # Reset setup status")
+            print("  python -m app.__main__ --help         # Show this help")
+            sys.exit(0)
+    
     print("🚀 Starting Tekstemaskin server...")
     
     # Step 1: Setup environment file
     check_and_setup_env()
     
-    # Step 2: Check Ollama installation
-    ollama_installed = check_ollama_installation()
-    if not ollama_installed:
-        ollama_installed = offer_ollama_installation()
-    
-    if ollama_installed:
-        print("🤖 Ollama is ready for AI summaries!")
+    # Check if setup has already been completed
+    if is_setup_completed():
+        print("✅ Setup already completed - starting server directly...")
+        print("\n" + "="*60)
+        print("🚀 STARTING TEKSTEMASKIN SERVER")
+        print("="*60)
     else:
-        print("⚠️  Ollama not available - summaries will not work")
-        print("   You can still use transcription features")
-    
-    print("\n" + "="*60)
-    print("🚀 STARTING TEKSTEMASKIN SERVER")
-    print("="*60)
+        # Step 2: Interactive audio setup guide
+        print("\n🎵 Audio Setup Guide")
+        print("This will help you configure audio for digital meetings.")
+        print("You can skip this and configure later if you prefer.")
+        print("\nWould you like to run the audio setup guide? (y/n): ", end="")
+        
+        try:
+            response = input().lower().strip()
+            if response in ['y', 'yes', 'j', 'ja']:
+                interactive_audio_setup()
+            else:
+                print("⏭️  Skipping audio setup guide.")
+                print("   You can configure audio in the Tekstemaskin control panel")
+        except KeyboardInterrupt:
+            print("\n⏭️  Audio setup cancelled.")
+        
+        # Step 3: Check Ollama installation
+        ollama_installed = check_ollama_installation()
+        if not ollama_installed:
+            ollama_installed = offer_ollama_installation()
+        
+        if ollama_installed:
+            print("🤖 Ollama is ready for AI summaries!")
+        else:
+            print("⚠️  Ollama not available - summaries will not work")
+            print("   You can still use transcription features")
+        
+        # Mark setup as completed
+        mark_setup_completed()
+        
+        print("\n" + "="*60)
+        print("🚀 STARTING TEKSTEMASKIN SERVER")
+        print("="*60)
     
     # Start server in a separate thread
     server_thread = Thread(target=lambda: uvicorn.run(

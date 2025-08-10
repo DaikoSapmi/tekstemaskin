@@ -45,7 +45,11 @@ This project was developed to provide high-quality Norwegian and Northern Sámi 
 
 #### macOS - BlackHole Configuration for Digital Meetings
 
-**BlackHole** is essential for capturing both your microphone and meeting participants' audio simultaneously. Here's how to set it up:
+**BlackHole** is essential for capturing both your microphone and meeting participants' audio simultaneously. 
+
+> **💡 Smart Detection**: Tekstemaskin automatically detects if BlackHole is already installed and skips the installation step during setup.
+
+Here's how to set it up:
 
 1. **Install BlackHole 2ch**
    ```bash
@@ -98,6 +102,27 @@ cd tekstemaskin
 
 # Make the script executable and run
 chmod +x run_mac.sh
+```
+
+### First-Time Setup
+
+When you run Tekstemaskin for the first time, it will guide you through:
+
+1. **Audio Setup Guide** - Interactive setup for BlackHole and audio configuration
+2. **Ollama Installation** - Optional AI summarization setup
+3. **Environment Configuration** - Automatic .env file creation
+
+After the first setup, Tekstemaskin will start directly without showing the setup guide.
+
+**To reset setup and run the guide again:**
+```bash
+python -m app.__main__ --reset-setup
+```
+
+**To see available commands:**
+```bash
+python -m app.__main__ --help
+```
 ./run_mac.sh
 ```
 

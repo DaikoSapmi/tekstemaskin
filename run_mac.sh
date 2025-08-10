@@ -38,6 +38,7 @@ pip install -r requirements.txt
 echo -e "\n› Starter applikasjonen..."
 echo "💡 The app will now:"
 echo "   • Check/create .env file from dot_env.example"
+echo "   • Offer interactive audio setup guide (optional)"
 echo "   • Verify Ollama installation for AI summaries"
 echo "   • Start the server and wait for it to be ready"
 echo "   • Open browser automatically when ready"
