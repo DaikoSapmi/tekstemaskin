@@ -10,7 +10,7 @@ A sophisticated real-time speech-to-text application built with FastAPI, featuri
 
 ### Core Functionality
 - **Real-time transcription** with minimal latency using Whisper models
-- **Multi-language support** - Norwegian (Bokmål/Nynorsk) and English
+- **Multi-language support** - It transcribes from Northern Sámi, Norwegian and English to Norwegian (Bokmål/Nynorsk) and English
 - **Live streaming** with WebSocket support for real-time updates
 - **Chroma key view** optimized for OBS/streaming with green screen background
 - **Automatic audio recording** with session management
@@ -28,7 +28,7 @@ A sophisticated real-time speech-to-text application built with FastAPI, featuri
 
 **Rune Fjellheim** - [DaikoSapmi](https://github.com/DaikoSapmi)
 
-This project was developed to provide high-quality Norwegian speech recognition capabilities for meetings, presentations, and live events.
+This project was developed to provide high-quality Norwegian and Northern Sámi speech recognition capabilities for meetings, presentations, and live events.
 
 ## 📋 Requirements
 
@@ -39,8 +39,50 @@ This project was developed to provide high-quality Norwegian speech recognition 
 - **Storage**: 2GB+ free space for models and dependencies
 
 ### Audio Setup
-- **macOS**: [BlackHole 2ch](https://existential.audio/blackhole/) for system audio capture
-- **Windows**: "Stereo Mix" or virtual audio cable (e.g., VB-Audio)
+
+#### macOS - BlackHole Configuration for Digital Meetings
+
+**BlackHole** is essential for capturing both your microphone and meeting participants' audio simultaneously. Here's how to set it up:
+
+1. **Install BlackHole 2ch**
+   ```bash
+   brew install blackhole-2ch
+   ```
+   Or download from [existential.audio/blackhole](https://existential.audio/blackhole/)
+
+2. **Configure Audio MIDI Setup**
+   - Open **Audio MIDI Setup** (Applications → Utilities → Audio MIDI Setup)
+   - In the left sidebar, you should see **BlackHole 2ch** listed
+
+3. **Create Multi-Output Device**
+   - Click the **+** button at the bottom left
+   - Select **Create Multi-Output Device**
+   - Name it "Meeting Audio" or similar
+   - Check both **Built-in Output** and **BlackHole 2ch**
+   - Set **Built-in Output** as the master device
+
+4. **Set System Audio Output**
+   - Go to **System Preferences → Sound → Output**
+   - Select your **Multi-Output Device** (e.g., "Meeting Audio")
+   - This ensures system audio goes to both speakers and BlackHole
+
+5. **Configure BlackHole Input**
+   - In **Audio MIDI Setup**, select **BlackHole 2ch**
+   - Set **Format** to **2ch-16bit-48kHz** (or match your system)
+   - Ensure **Drift Correction** is enabled
+
+6. **Test the Setup**
+   - Play audio from any application
+   - You should hear it through speakers AND it should be available as input in Tekstemaskin
+
+**Pro Tips for Digital Meetings:**
+- **Zoom/Teams**: Audio will automatically route through BlackHole
+- **Browser meetings**: Ensure browser audio isn't muted
+- **Volume levels**: Adjust system volume to balance microphone vs. participant audio
+- **Latency**: BlackHole adds minimal latency (~1-2ms) which is negligible for transcription
+
+#### Windows
+- **"Stereo Mix"** or virtual audio cable (e.g., VB-Audio)
 
 ## 🛠️ Installation
 
@@ -113,7 +155,10 @@ OPENAI_API_KEY=your_key_here
 ### 1. Control Panel
 Navigate to `http://localhost:8000/control` to:
 - Select language (Norwegian Bokmål/Nynorsk or English)
-- Choose audio input device
+- Choose audio input device:
+  - **BlackHole 2ch** (macOS) - Captures system audio + microphone
+  - **Default microphone** - Captures only microphone input
+  - **Other audio devices** - Any available audio input
 - Start/stop transcription sessions
 
 ### 2. Live View
@@ -166,6 +211,13 @@ tekstemaskin/
 - Ensure audio capture software is running (BlackHole, VB-Audio)
 - Check system audio permissions
 - Verify microphone access in system settings
+
+**BlackHole not working (macOS):**
+- Verify BlackHole 2ch is installed and enabled in Audio MIDI Setup
+- Check that Multi-Output Device is set as system audio output
+- Restart applications (Zoom, Teams, etc.) after BlackHole setup
+- Ensure BlackHole 2ch appears in Tekstemaskin's device list
+- Try restarting the audio system: `sudo killall coreaudiod`
 
 **Model download fails:**
 - Check internet connection
