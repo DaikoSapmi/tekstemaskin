@@ -1,4 +1,4 @@
-# Tekstemaskin - Real-time Speech-to-Text with Norwegian Support
+# Tekstemaskin - Real-time Speech-to-Text with translation capabilities
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.112.0-green.svg)](https://fastapi.tiangolo.com/)
