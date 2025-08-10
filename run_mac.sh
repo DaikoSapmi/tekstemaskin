@@ -36,4 +36,10 @@ pip install -r requirements.txt
 
 # --- STEG 4: Start applikasjonen ---
 echo -e "\n› Starter applikasjonen..."
+echo "💡 The app will now:"
+echo "   • Check/create .env file from dot_env.example"
+echo "   • Verify Ollama installation for AI summaries"
+echo "   • Start the server and wait for it to be ready"
+echo "   • Open browser automatically when ready"
+echo ""
 python -m app

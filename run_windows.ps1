@@ -44,5 +44,11 @@ New-Item -ItemType Directory -Force -Path "data\transcripts" | Out-Null
 
 # --- STEG 5: Start applikasjonen ---
 Write-Host "`n› Starter applikasjonen..." -ForegroundColor Green
+Write-Host "💡 The app will now:" -ForegroundColor Cyan
+Write-Host "   • Check/create .env file from dot_env.example" -ForegroundColor Cyan
+Write-Host "   • Verify Ollama installation for AI summaries" -ForegroundColor Cyan
+Write-Host "   • Start the server and wait for it to be ready" -ForegroundColor Cyan
+Write-Host "   • Open browser automatically when ready" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 # Bruker 'python -m app' for konsistens med Mac-skriptet
 python -m app

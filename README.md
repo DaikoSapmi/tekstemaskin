@@ -110,7 +110,10 @@ The scripts will automatically:
 - Install system dependencies
 - Create a Python virtual environment
 - Install Python packages
-- Launch the application
+- Check/create `.env` file from `dot_env.example`
+- Verify Ollama installation for AI summaries
+- Start the server and wait for it to be ready
+- Open browser automatically when ready
 
 ### Manual Installation
 
@@ -124,6 +127,12 @@ pip install -r requirements.txt
 
 # Run the application
 python -m app
+
+**Note**: The manual startup now includes:
+- Automatic `.env` file creation from `dot_env.example`
+- Ollama installation check and setup assistance
+- Smart server startup with health checks
+- Automatic browser opening when ready
 ```
 
 ## 🤖 AI Summarization Setup
@@ -217,6 +226,45 @@ OPENAI_API_KEY=your_key_here
 # OLLAMA_BASE_URL: Default Ollama endpoint (usually http://localhost:11434/v1)
 # OLLAMA_MODEL: Model name (gpt-oss:20B, llama3.2:3b, mistral:7b, etc.)
 # OPENAI_MODEL: OpenAI model name (gpt-4o-mini, gpt-4, etc.)
+```
+
+## 🚀 **Smart Startup Features**
+
+Tekstemaskin now includes intelligent startup features that make setup and usage seamless:
+
+### **Automatic Environment Setup**
+- **`.env` File Creation**: Automatically copies `dot_env.example` to `.env` if missing
+- **Configuration Validation**: Ensures all required settings are available
+- **User Guidance**: Provides helpful tips for customizing settings
+
+### **Ollama Integration Check**
+- **Installation Detection**: Automatically detects if Ollama is installed
+- **Installation Assistance**: Offers to install Ollama during startup
+- **Cross-Platform Support**: macOS (Homebrew), Windows (winget), Linux (install script)
+- **Model Management**: Automatically downloads default models
+- **Service Startup**: Ensures Ollama service is running
+
+### **Smart Server Startup**
+- **Health Check Monitoring**: Waits for server to be fully ready
+- **Progress Indicators**: Shows startup progress with clear status messages
+- **Automatic Browser Opening**: Only opens browser when server is confirmed ready
+- **Fallback Handling**: Graceful handling of edge cases and timeouts
+
+### **Startup Flow**
+```
+🚀 Starting Tekstemaskin server...
+📋 .env file not found, copying from dot_env.example...
+✅ .env file created successfully!
+🤖 Checking Ollama installation...
+✅ Ollama is installed: ollama version is 0.11.4
+🤖 Ollama is ready for AI summaries!
+============================================================
+🚀 STARTING TEKSTEMASKIN SERVER
+============================================================
+🔍 Checking if server is ready...
+✅ Server is ready! healthy
+🌐 Browser opened: http://localhost:8000/control
+🎉 Tekstemaskin is ready to use!
 ```
 
 ## 🎯 Usage
@@ -314,6 +362,13 @@ tekstemaskin/
 - Use GPU acceleration if available
 - Reduce chunk size for lower latency
 - Close other resource-intensive applications
+
+**Startup issues:**
+- **Browser opens too early**: The app now waits for server readiness before opening
+- **Health check timeout**: Server may take longer on slower systems, wait up to 30 seconds
+- **Ollama installation fails**: Check internet connection and system permissions
+- **Port 8000 already in use**: Stop other applications using the port or change PORT in .env
+- **Permission denied**: Ensure scripts have execute permissions (`chmod +x run_mac.sh`)
 
 ## 🤝 Contributing
 
