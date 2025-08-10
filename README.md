@@ -10,7 +10,7 @@ A sophisticated real-time speech-to-text application built with FastAPI, featuri
 
 ### Core Functionality
 - **Real-time transcription** with minimal latency using Whisper models
-- **Multi-language support** - It transcribes from Northern Sámi, Norwegian and English to Norwegian (Bokmål/Nynorsk) and English
+- **Multi-language support** - It transcribes from Northern Sámi, Norwegian and English to Norwegian (Bokmål/Nynorsk) or English
 - **Live streaming** with WebSocket support for real-time updates
 - **Chroma key view** optimized for OBS/streaming with green screen background
 - **Automatic audio recording** with session management
