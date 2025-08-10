@@ -1,0 +1,45 @@
+# -------------------------
+# Python
+# -------------------------
+
+# Virtuelt miljø
+# Ignorer selve venv-mappen
+.venv/
+venv/
+env/
+
+# Python bytecode og cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+# -------------------------
+# Prosjektspesifikke filer
+# -------------------------
+
+# Data-mappen som inneholder alle opptak og transkripsjoner
+data/
+
+# Miljø-filen som inneholder sensitiv info og lokal konfigurasjon
+.env
+
+# Test-filer og dynamisk genererte output-filer i rotmappen
+final.txt
+final_cli.txt
+final.md
+test_ollama.py
+
+
+# -------------------------
+# Utviklingsverktøy & OS
+# -------------------------
+
+# IDE- og editor-konfigurasjon
+.vscode/
+.idea/
+
+# OS-spesifikke filer
+.DS_Store # macOS
+Thumbs.db # Windows
