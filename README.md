@@ -4,7 +4,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.112.0-green.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A sophisticated real-time speech-to-text application built with FastAPI, featuring Norwegian language support, live transcription, and AI-powered meeting summarization.
+A sophisticated real-time speech-to-text application built with FastAPI, featuring Norwegian and Northern Sámi language support, live transcription, and AI-powered meeting summarization.
 
 ## 🚀 Features
 
@@ -200,4 +200,4 @@ For support, questions, or feature requests:
 
 ---
 
-**Built with ❤️ for the Norwegian language community**
+**Built with ❤️ for the Sámi community**
