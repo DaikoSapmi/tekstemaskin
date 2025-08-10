@@ -1,0 +1,37 @@
+# Modell og enhet
+ASR_MODEL=NbAiLab/nb-whisper-large
+ASR_DEVICE=mps        # auto | cpu | mps | cuda
+
+# Språk (for NB-Whisper: no=bokmål, nn=nynorsk, en=engelsk)
+APP_DEFAULT_LANG=no    # no | nn | en
+
+# Lyd og segmentering (raskere live: 2s + 0.4s overlapp)
+SAMPLE_RATE=16000
+CHUNK_SECONDS=4
+OVERLAP_SECONDS=0.5
+
+# Storfil-opptak
+BIGFILE_ROTATE_MIN=0   # 0=én stor fil, ellers roter i minutter (f.eks. 20)
+SAVE_SEGMENTS=0        # 1 for å lagre 4s seg_*.wav (debug)
+
+# Offline-transkribering (etter opptak / store filer)
+OFFLINE_CHUNK_SECONDS=28       # HF anbefaling (bedre enn 30s)
+OFFLINE_NUM_BEAMS=5            # høyere nøyaktighet (tregere)
+OFFLINE_BATCH_SIZE=8           # prosesser flere chunks i parallell
+# OFFLINE_RETURN_TIMESTAMPS: tomt, "true" for setning, "word" for ord-nivå
+OFFLINE_RETURN_TIMESTAMPS=
+OFFLINE_DEVICE=mps
+# --- LLM Oppsummering (Ollama, OpenAI, Azure) ---
+
+# For lokal oppsummering med Ollama
+OLLAMA_BASE_URL=http://localhost:11434/v1
+OLLAMA_MODEL=gpt-oss:20B
+
+# For OpenAI API (valgfritt)
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
+
+# For Azure OpenAI (valgfritt)
+AZURE_API_KEY=
+AZURE_ENDPOINT=
+AZURE_DEPLOYMENT=

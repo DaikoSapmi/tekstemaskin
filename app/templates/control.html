@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tekstemaskin – Kontrollpanel</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body class="app">
+    <header class="topbar">
+      <h1>Tekstemaskin <span class="tag">nb-whisper-large</span></h1>
+      <nav class="links">
+        <a class="link" href="/live" target="_blank" rel="noreferrer">Åpne Live-visning</a>
+        <a class="link" href="/chroma" target="_blank" rel="noreferrer">Åpne Chroma</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Oppsett</h2>
+        <form action="/set_language" method="post" class="row gap">
+          <label class="label">Språk</label>
+          <div class="segmented">
+            <input type="radio" id="lang-no" name="lang" value="no" {% if lang=='no' %}checked{% endif %} />
+            <label for="lang-no">Bokmål</label>
+            <input type="radio" id="lang-nn" name="lang" value="nn" {% if lang=='nn' %}checked{% endif %} />
+            <label for="lang-nn">Nynorsk</label>
+            <input type="radio" id="lang-en" name="lang" value="en" {% if lang=='en' %}checked{% endif %} />
+            <label for="lang-en">Engelsk</label>
+          </div>
+          <button class="btn" type="submit" title="Lagre språk">Lagre</button>
+        </form>
+
+        <div class="row gap mt">
+          <button id="btnStart" class="btn btn-primary">Start</button>
+          <button id="btnStop" class="btn btn-danger" disabled>Stopp</button>
+        </div>
+
+        <div class="row gap mt">
+          <button id="btnAfter" class="btn">Transkribér storfil</button>
+          <button id="btnSumm" class="btn">Lag møtereferat (md)</button>
+          <a class="btn ghost" href="/download/live" target="_blank">Last ned live.txt</a>
+          <a class="btn ghost" href="/download/final" target="_blank">Last ned final.txt</a>
+        </div>
+
+        <div id="status" class="status mt" role="status">Klar</div>
+      </section>
+
+      <section class="card">
+        <h2>Live forhåndsvisning</h2>
+        <div id="livePreview" class="livebox" aria-live="polite">
+          <div id="liveText"></div>
+          <div class="cursor" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="help">
+        <details>
+          <summary>Tips</summary>
+          <ul>
+            <li>På Mac: bruk BlackHole/Loopback som lydkilde for å hente systemlyd.</li>
+            <li>Første gang kan nedlasting av modellen ta litt tid.</li>
+            <li>Hold kontrollpanelet åpent mens du tekster live.</li>
+          </ul>
+        </details>
+      </section>
+    </main>
+
+    <script src="/static/control.js" defer></script>
+  </body>
+</html>
