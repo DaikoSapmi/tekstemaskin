@@ -6,6 +6,9 @@
 
 A sophisticated real-time speech-to-text application built with FastAPI, featuring Norwegian and Northern Sámi language support, live transcription, and AI-powered meeting summarization.
 
+<img width="1245" height="656" alt="Skjermbilde 2025-08-10 kl  19 48 02" src="https://github.com/user-attachments/assets/e9da0534-fe3a-4923-8f32-82e6ec7be120" />
+
+
 ## 🚀 Features
 
 ### Core Functionality
