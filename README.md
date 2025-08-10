@@ -123,6 +123,67 @@ pip install -r requirements.txt
 python -m app
 ```
 
+## 🤖 AI Summarization Setup
+
+Tekstemaskin can generate meeting summaries using AI models. You have three options:
+
+### Option 1: Local Ollama (Recommended for Privacy)
+
+**Ollama** allows you to run large language models locally on your machine, keeping your data private and avoiding API costs.
+
+#### macOS Installation
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start Ollama service
+ollama serve
+
+# Download a Norwegian-optimized model (in a new terminal)
+ollama pull gpt-oss:20B
+# Alternative models:
+# ollama pull llama3.2:3b    # Smaller, faster
+# ollama pull mistral:7b     # Good balance of speed/quality
+```
+
+#### Windows Installation
+1. Download from [ollama.ai/download](https://ollama.ai/download)
+2. Run the installer
+3. Open PowerShell and run:
+   ```powershell
+   ollama serve
+   ollama pull gpt-oss:20B
+   ```
+
+#### Linux Installation
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start service and download model
+ollama serve
+ollama pull gpt-oss:20B
+```
+
+#### Verify Ollama Installation
+```bash
+# Check if Ollama is running
+ollama list
+
+# Test the model
+ollama run gpt-oss:20B "Write a short greeting in Norwegian"
+```
+
+### Option 2: OpenAI API
+- Get an API key from [platform.openai.com](https://platform.openai.com)
+- Add to your `.env` file: `OPENAI_API_KEY=your_key_here`
+
+### Option 3: Azure OpenAI
+- Configure your Azure OpenAI endpoint in `.env`
+- Set `AZURE_API_KEY`, `AZURE_ENDPOINT`, and `AZURE_DEPLOYMENT`
+
+**Note**: Commercial APIs require internet connection and may incur costs per request.
+
 ## ⚙️ Configuration
 
 Copy `.env.example` to `.env` and customize your settings:
@@ -148,6 +209,11 @@ OVERLAP_SECONDS=0.5
 OLLAMA_BASE_URL=http://localhost:11434/v1
 OLLAMA_MODEL=gpt-oss:20B
 OPENAI_API_KEY=your_key_here
+
+# Ollama Configuration Details
+# OLLAMA_BASE_URL: Default Ollama endpoint (usually http://localhost:11434/v1)
+# OLLAMA_MODEL: Model name (gpt-oss:20B, llama3.2:3b, mistral:7b, etc.)
+# OPENAI_MODEL: OpenAI model name (gpt-4o-mini, gpt-4, etc.)
 ```
 
 ## 🎯 Usage
@@ -198,10 +264,19 @@ tekstemaskin/
 
 ## 🚀 Performance Tips
 
+### Speech Recognition
 - **GPU Acceleration**: Use CUDA (NVIDIA) or MPS (Apple Silicon) for faster processing
 - **Model Selection**: `NbAiLab/nb-whisper-large` provides excellent Norwegian accuracy
 - **Audio Quality**: Use 16kHz sample rate for optimal Whisper performance
 - **Chunk Size**: 4-second chunks with 0.5s overlap balance speed and accuracy
+
+### AI Summarization
+- **Ollama Models**: Choose based on your hardware capabilities:
+  - **gpt-oss:20B**: Best quality, requires 16GB+ RAM
+  - **llama3.2:3b**: Fast, good quality, works with 8GB RAM
+  - **mistral:7b**: Balanced performance, needs 12GB+ RAM
+- **Commercial APIs**: Faster processing but requires internet and may incur costs
+- **Batch Processing**: Process multiple transcripts together for efficiency
 
 ## 🔍 Troubleshooting
 
@@ -218,6 +293,14 @@ tekstemaskin/
 - Restart applications (Zoom, Teams, etc.) after BlackHole setup
 - Ensure BlackHole 2ch appears in Tekstemaskin's device list
 - Try restarting the audio system: `sudo killall coreaudiod`
+
+**Ollama not working:**
+- Ensure Ollama service is running: `ollama serve`
+- Check if model is downloaded: `ollama list`
+- Verify Ollama is accessible: `curl http://localhost:11434/v1/models`
+- Check firewall settings blocking port 11434
+- Restart Ollama service if needed: `ollama stop && ollama serve`
+- Ensure sufficient RAM for the model (20B models need 16GB+ RAM)
 
 **Model download fails:**
 - Check internet connection
