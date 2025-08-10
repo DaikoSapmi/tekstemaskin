@@ -418,4 +418,4 @@ For support, questions, or feature requests:
 
 ---
 
-**Built with ❤️ for the Sámi community**
+**Built with ❤️ for Sápmi**
