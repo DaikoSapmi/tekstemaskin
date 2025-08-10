@@ -24,3 +24,4 @@ openai>=1.0.0
 
 # Verktøy
 python-dotenv==1.0.1
+requests>=2.31.0

@@ -17,8 +17,25 @@ from .utils import session_stamp, session_paths
 from .summary_llm import summarize_to_markdown
 from .offline_asr import transcribe_many_with_progress
 
-app = FastAPI()
+app = FastAPI(
+    title="Tekstemaskin",
+    description="Real-time Speech-to-Text with Norwegian Support",
+    version="1.0.0"
+)
 BASE_DIR = Path(__file__).resolve().parent
+
+@app.on_event("startup")
+async def startup_event():
+    """Log when the application starts up"""
+    print("🚀 Tekstemaskin server starting up...")
+    print(f"📁 Base directory: {BASE_DIR}")
+    print(f"🌐 Server will be available at: http://localhost:8000")
+    print(f"🎛️  Control panel: http://localhost:8000/control")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Log when the application shuts down"""
+    print("👋 Tekstemaskin server shutting down...")
 
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=BASE_DIR / "templates")
@@ -48,6 +65,20 @@ class WSManager:
 
 manager = WSManager()
 
+
+@app.get("/health")
+def health():
+    """Health check endpoint to verify server is ready"""
+    return {
+        "status": "healthy", 
+        "service": "tekstemaskin",
+        "version": "1.0.0",
+        "endpoints": {
+            "control": "/control",
+            "live": "/live", 
+            "chroma": "/chroma"
+        }
+    }
 
 @app.get("/")
 def root():
