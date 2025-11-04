@@ -413,8 +413,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support, questions, or feature requests:
-- Open an issue on GitHub
-- Contact the author at [rune@fjellheim.tv](mailto:rune@fjellheim.tv)
+- I am really sorry to inform you that you are on your own, but you are of course free to use it, improve it and abuse it as you want!
 
 ---
 
